@@ -1,17 +1,4 @@
-/*Variables a crear:
-eleccionUsuario,
-eleccionCPU,
-cantidadRondas,
-contadorUsuario,
-contadorCPU,
-
-Funciones a crear:
-iniciarJuego,
-iniciarRonda,
-obtenerResultados,
-obtenerEleccionUsuario,
-obtenerEleccionCpu,*/
-
+//funcion que inicia el juego y termina cuando uno de los jugadores llega a 5 puntos
 function iniciarJuego() {
   let contadorUsuario = 0;
   let contadorCPU = 0;
