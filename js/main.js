@@ -1,69 +1,31 @@
-//funcion que inicia el juego y termina cuando uno de los jugadores llega a 5 puntos
-function iniciarJuego() {
-  let contadorUsuario = 0;
-  let contadorCPU = 0;
+const botonesEleccion = document.getElementsByClassName("btnJugador");
+const numRondas = document.getElementById("rondas");
+const ptosJugador = document.getElementById("ptsJugador");
+const ptosCpu = document.getElementById("ptsCpu");
+const opcionCpu = document.getElementById("opcionCpu");
 
-  while (contadorUsuario < 5 || contadorCPU < 5) {
-    let ganador = iniciarRonda();
+let puntosJugador = 0;
+let puntosCpu = 0;
+let numeroRondas = 0;
 
-    if (ganador === "usuario") {
-      contadorUsuario++;
+for (const botones of botonesEleccion) {
+  botones.addEventListener("click", (e) => {
+    const eleccionJugador = e.target.id.toUpperCase(); //obtengo eleccion del jugador
+    const eleccionCpu = obtenereleccionCpu(); //obtengo eleccion del CPU
 
-      if (contadorUsuario === 5) {
-        alert("Ganaste el juego, Bien hecho!");
-        break;
-      } else {
-        alert(`Puntuación:
-            Usuario : ${contadorUsuario} puntos
-            CPU: ${contadorCPU} puntos`);
-      }
-    } else if (ganador === "cpu") {
-      contadorCPU++;
+    console.log("Eleccion del jugador: " + eleccionJugador);
+    console.log("Eleccion del CPU: " + eleccionCpu);
 
-      if (contadorCPU === 5) {
-        alert("Perdiste el juego :(");
-        break;
-      } else {
-        alert(
-          `Puntuación:
-            Usuario : ${contadorUsuario} puntos
-            CPU: ${contadorCPU} puntos`
-        );
-      }
-    }
-  }
-}
+    const ganador = obtenerGanador(eleccionJugador, eleccionCpu);
+    console.log("El ganador de la ronda es " + ganador);
 
-//funcion qie obtiene las elecciones de los jugadores y devuelve un ganador
-function iniciarRonda() {
-  let eleccionUsuario = obtenerEleccionUsuario();
-
-  let eleccionCpu = obtenerEleccionCpu();
-
-  let ganadorRonda = obtenerGanador(eleccionUsuario, eleccionCpu);
-
-  return ganadorRonda;
-}
-
-//funcion para obtener eleccion del usuario
-function obtenerEleccionUsuario() {
-  let eleccionUsuario;
-
-  do {
-    eleccionUsuario = prompt(
-      "Ingrese su elección entre Piedra, Papel o Tijera:"
-    ).toUpperCase();
-  } while (
-    eleccionUsuario !== "PIEDRA" &&
-    eleccionUsuario !== "PAPEL" &&
-    eleccionUsuario !== "TIJERA"
-  );
-
-  return eleccionUsuario;
+    modificarTablero(ganador);
+    mostrarResultadoRonda(eleccionCpu, ganador);
+  });
 }
 
 //function para obtener eleccion de CPU
-function obtenerEleccionCpu() {
+function obtenereleccionCpu() {
   let elegirNumCpu = () => Math.floor(Math.random() * 3);
 
   const numCpu = elegirNumCpu();
@@ -88,45 +50,36 @@ function obtenerEleccionCpu() {
 }
 
 //funcion que determina quien gano la ronda o si fue empate
-function obtenerGanador(eleccionUsuario, eleccionCPU) {
+function obtenerGanador(eleccionjugador, eleccionCpu) {
   let ganador;
 
-  switch (eleccionUsuario) {
+  switch (eleccionjugador) {
     case "PIEDRA":
-      if (eleccionCPU === "PIEDRA") {
-        alert("CPU eligió PIEDRA. Es un empate -.-");
+      if (eleccionCpu === "PIEDRA") {
         ganador = "empate";
-      } else if (eleccionCPU === "PAPEL") {
-        alert("CPU elegió PAPEL. Perdiste :(");
+      } else if (eleccionCpu === "PAPEL") {
         ganador = "cpu";
       } else {
-        alert("CPU eligió TIJERA. Ganaste :D");
-        ganador = "usuario";
+        ganador = "jugador";
       }
       break;
 
     case "PAPEL":
-      if (eleccionCPU === "PIEDRA") {
-        alert("CPU eligió PIEDRA. Ganaste :D");
-        ganador = "usuario";
-      } else if (eleccionCPU === "PAPEL") {
-        alert("CPU elegió PAPEL. Es un empate -.- :(");
+      if (eleccionCpu === "PIEDRA") {
+        ganador = "jugador";
+      } else if (eleccionCpu === "PAPEL") {
         ganador = "empate";
       } else {
-        alert("CPU eligió TIJERA. Perdiste :(");
         ganador = "cpu";
       }
       break;
 
     case "TIJERA":
-      if (eleccionCPU === "PIEDRA") {
-        alert("CPU eligió PIEDRA. Perdiste :(");
+      if (eleccionCpu === "PIEDRA") {
         ganador = "cpu";
-      } else if (eleccionCPU === "PAPEL") {
-        alert("CPU elegió PAPEL. Ganaste :D");
-        ganador = "usuario";
+      } else if (eleccionCpu === "PAPEL") {
+        ganador = "jugador";
       } else {
-        alert("CPU eligió TIJERA. Empataste -.-");
         ganador = "empate";
       }
       break;
@@ -134,4 +87,35 @@ function obtenerGanador(eleccionUsuario, eleccionCPU) {
   return ganador;
 }
 
-iniciarJuego();
+function modificarTablero(ganadorRonda) {
+  numeroRondas++;
+  numRondas.textContent = `Ronda ${numeroRondas}`;
+
+  if (ganadorRonda === "jugador") {
+    console.log("Gano Jugador");
+    puntosJugador++;
+    ptosJugador.textContent = `Jugador: ${puntosJugador}`;
+  } else if (ganadorRonda === "cpu") {
+    console.log("Gano Cpu");
+    puntosCpu++;
+    ptosCpu.textContent = `CPU: ${puntosCpu}`;
+  } else {
+    console.log("Empate");
+  }
+  console.log("Puntos jugador: " + puntosJugador);
+  console.log("Puntos CPU " + puntosCpu);
+}
+
+function mostrarResultadoRonda(eleccionCpu, ganador) {
+  const mostrarResultado = document.createElement("p");
+
+  opcionCpu.appendChild(mostrarResultado);
+
+  if (ganador === "jugador") {
+    mostrarResultado.textContent = `CPU eligió ${eleccionCpu}. Ganaste!!! `;
+  } else if (ganador === "cpu") {
+    mostrarResultado.textContent = `CPU eligió ${eleccionCpu}. Perdiste :(`;
+  } else {
+    mostrarResultado.textContent = `CPU eligió ${eleccionCpu}. Es un empate`;
+  }
+}
