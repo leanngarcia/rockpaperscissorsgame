@@ -3,6 +3,7 @@ const numRondas = document.getElementById("rondas");
 const ptosJugador = document.getElementById("ptsJugador");
 const ptosCpu = document.getElementById("ptsCpu");
 const opcionCpu = document.getElementById("opcionCpu");
+const mostrarResultado = document.createElement("p");
 
 let puntosJugador = 0;
 let puntosCpu = 0;
@@ -19,8 +20,9 @@ for (const botones of botonesEleccion) {
     const ganador = obtenerGanador(eleccionJugador, eleccionCpu);
     console.log("El ganador de la ronda es " + ganador);
 
-    modificarTablero(ganador);
     mostrarResultadoRonda(eleccionCpu, ganador);
+    modificarTablero(ganador);
+    terminarJuego(puntosJugador, puntosCpu);
   });
 }
 
@@ -107,9 +109,9 @@ function modificarTablero(ganadorRonda) {
 }
 
 function mostrarResultadoRonda(eleccionCpu, ganador) {
-  const mostrarResultado = document.createElement("p");
-
-  opcionCpu.appendChild(mostrarResultado);
+  if (numRondas) {
+    opcionCpu.appendChild(mostrarResultado);
+  }
 
   if (ganador === "jugador") {
     mostrarResultado.textContent = `CPU eligió ${eleccionCpu}. Ganaste!!! `;
@@ -118,4 +120,26 @@ function mostrarResultadoRonda(eleccionCpu, ganador) {
   } else {
     mostrarResultado.textContent = `CPU eligió ${eleccionCpu}. Es un empate`;
   }
+}
+
+function terminarJuego(puntosJugador, puntosCpu) {
+  if (puntosJugador === 5) {
+    ptosJugador.textContent = `Jugador: ${puntosJugador}`;
+    alert("Ganaste! Bien hecho :D");
+    reiniciarScore();
+  } else if (puntosCpu === 5) {
+    ptosCpu.textContent = `CPU: ${puntosCpu}`;
+    alert("Perdiste... :( Intenta nuevamente");
+    reiniciarScore();
+  }
+}
+
+function reiniciarScore() {
+  puntosJugador = 0;
+  puntosCpu = 0;
+  numeroRondas = 0;
+
+  numRondas.textContent = `Ronda ${numeroRondas}`;
+  ptosJugador.textContent = `Jugador: ${puntosJugador}`;
+  ptosCpu.textContent = `CPU: ${puntosCpu}`;
 }
