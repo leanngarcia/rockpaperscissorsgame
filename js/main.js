@@ -22,7 +22,9 @@ for (const botones of botonesEleccion) {
 
     mostrarResultadoRonda(eleccionCpu, ganador);
     modificarTablero(ganador);
-    terminarJuego(puntosJugador, puntosCpu);
+    setTimeout(() => {
+      terminarJuego(puntosJugador, puntosCpu);
+    }, 100);
   });
 }
 
@@ -51,7 +53,7 @@ function obtenereleccionCpu() {
   return eleccionCpu;
 }
 
-//funcion que determina quien gano la ronda o si fue empate
+//determina quien gano la ronda o si fue empate
 function obtenerGanador(eleccionjugador, eleccionCpu) {
   let ganador;
 
@@ -89,6 +91,7 @@ function obtenerGanador(eleccionjugador, eleccionCpu) {
   return ganador;
 }
 
+//modifica los datos del DOM segun que jugador gano la ronda
 function modificarTablero(ganadorRonda) {
   numeroRondas++;
   numRondas.textContent = `Ronda ${numeroRondas}`;
@@ -108,6 +111,7 @@ function modificarTablero(ganadorRonda) {
   console.log("Puntos CPU " + puntosCpu);
 }
 
+//modifica el numero de ronda actual en DOM
 function mostrarResultadoRonda(eleccionCpu, ganador) {
   if (numRondas) {
     opcionCpu.appendChild(mostrarResultado);
@@ -122,6 +126,7 @@ function mostrarResultadoRonda(eleccionCpu, ganador) {
   }
 }
 
+//determina si hay un ganador y lanza un alert con el mensaje
 function terminarJuego(puntosJugador, puntosCpu) {
   if (puntosJugador === 5) {
     ptosJugador.textContent = `Jugador: ${puntosJugador}`;
@@ -134,6 +139,7 @@ function terminarJuego(puntosJugador, puntosCpu) {
   }
 }
 
+//reinicia los puntajes y rondas si el juego termino
 function reiniciarScore() {
   puntosJugador = 0;
   puntosCpu = 0;
